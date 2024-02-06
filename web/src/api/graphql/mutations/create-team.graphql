@@ -1,0 +1,5 @@
+mutation createTeam($data: TeamCreateInput!, $orgId: Float) {
+  createOneTeam(data: $data) {
+    ...DetailTeam
+  }
+}

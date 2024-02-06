@@ -1,0 +1,15 @@
+fragment DetailUser on User {
+  id
+  username
+  name
+  status
+  user_organizations {
+    ...CoreUserOrganization
+  }
+  user_organization(orgId : $orgId) {
+    ...CoreUserOrganization
+  }
+  organizations {
+    ...CoreOrganization
+  }
+}

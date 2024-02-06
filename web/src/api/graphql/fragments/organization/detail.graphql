@@ -1,0 +1,11 @@
+fragment DetailOrganization on Organization {
+  id
+  slug
+  name
+  users{
+    ...DetailUser
+  }
+  teams{
+    ...DetailTeam
+  }
+}

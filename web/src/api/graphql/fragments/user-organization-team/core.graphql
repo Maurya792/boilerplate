@@ -1,0 +1,8 @@
+fragment CoreUserOrganizationTeam on User_organization_team {
+  id
+  role
+  user_organization {
+    user_id
+  }
+  team_id
+}

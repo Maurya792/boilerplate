@@ -1,0 +1,5 @@
+fragment CoreDetailTeam on Team {
+  id
+  name
+  organization_id
+}

@@ -1,0 +1,5 @@
+mutation removeUserFromTeam($where: User_organization_teamWhereUniqueInput!) {
+  deleteOneUser_organization_team(where: $where) {
+    id
+  }
+}

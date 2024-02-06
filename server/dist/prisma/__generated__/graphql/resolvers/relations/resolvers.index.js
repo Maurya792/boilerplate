@@ -1,0 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.User_organization_teamRelationsResolver = exports.User_organizationRelationsResolver = exports.UserRelationsResolver = exports.TraceRelationsResolver = exports.TeamRelationsResolver = exports.PartRelationsResolver = exports.OrganizationRelationsResolver = exports.LogRelationsResolver = exports.AssetRelationsResolver = void 0;
+var AssetRelationsResolver_1 = require("./Asset/AssetRelationsResolver");
+Object.defineProperty(exports, "AssetRelationsResolver", { enumerable: true, get: function () { return AssetRelationsResolver_1.AssetRelationsResolver; } });
+var LogRelationsResolver_1 = require("./Log/LogRelationsResolver");
+Object.defineProperty(exports, "LogRelationsResolver", { enumerable: true, get: function () { return LogRelationsResolver_1.LogRelationsResolver; } });
+var OrganizationRelationsResolver_1 = require("./Organization/OrganizationRelationsResolver");
+Object.defineProperty(exports, "OrganizationRelationsResolver", { enumerable: true, get: function () { return OrganizationRelationsResolver_1.OrganizationRelationsResolver; } });
+var PartRelationsResolver_1 = require("./Part/PartRelationsResolver");
+Object.defineProperty(exports, "PartRelationsResolver", { enumerable: true, get: function () { return PartRelationsResolver_1.PartRelationsResolver; } });
+var TeamRelationsResolver_1 = require("./Team/TeamRelationsResolver");
+Object.defineProperty(exports, "TeamRelationsResolver", { enumerable: true, get: function () { return TeamRelationsResolver_1.TeamRelationsResolver; } });
+var TraceRelationsResolver_1 = require("./Trace/TraceRelationsResolver");
+Object.defineProperty(exports, "TraceRelationsResolver", { enumerable: true, get: function () { return TraceRelationsResolver_1.TraceRelationsResolver; } });
+var UserRelationsResolver_1 = require("./User/UserRelationsResolver");
+Object.defineProperty(exports, "UserRelationsResolver", { enumerable: true, get: function () { return UserRelationsResolver_1.UserRelationsResolver; } });
+var User_organizationRelationsResolver_1 = require("./User_organization/User_organizationRelationsResolver");
+Object.defineProperty(exports, "User_organizationRelationsResolver", { enumerable: true, get: function () { return User_organizationRelationsResolver_1.User_organizationRelationsResolver; } });
+var User_organization_teamRelationsResolver_1 = require("./User_organization_team/User_organization_teamRelationsResolver");
+Object.defineProperty(exports, "User_organization_teamRelationsResolver", { enumerable: true, get: function () { return User_organization_teamRelationsResolver_1.User_organization_teamRelationsResolver; } });
+//# sourceMappingURL=resolvers.index.js.map

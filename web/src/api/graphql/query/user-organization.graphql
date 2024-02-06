@@ -1,0 +1,5 @@
+query user_organization($data: User_organizationWhereUniqueInput!, $orgId : Float) {
+  user_organization(where: $data) {
+    ...DetailUserOrganization
+  }
+}

@@ -1,0 +1,8 @@
+mutation deleteOneTeam($where: TeamWhereUniqueInput!) {
+  deleteOneTeam(where: $where) {
+    users {
+      ...User
+    }
+    id
+  }
+}

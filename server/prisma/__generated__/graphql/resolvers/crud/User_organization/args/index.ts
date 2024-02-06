@@ -1,0 +1,14 @@
+export { AggregateUser_organizationArgs } from "./AggregateUser_organizationArgs";
+export { CreateManyUser_organizationArgs } from "./CreateManyUser_organizationArgs";
+export { CreateOneUser_organizationArgs } from "./CreateOneUser_organizationArgs";
+export { DeleteManyUser_organizationArgs } from "./DeleteManyUser_organizationArgs";
+export { DeleteOneUser_organizationArgs } from "./DeleteOneUser_organizationArgs";
+export { FindFirstUser_organizationArgs } from "./FindFirstUser_organizationArgs";
+export { FindFirstUser_organizationOrThrowArgs } from "./FindFirstUser_organizationOrThrowArgs";
+export { FindManyUser_organizationArgs } from "./FindManyUser_organizationArgs";
+export { FindUniqueUser_organizationArgs } from "./FindUniqueUser_organizationArgs";
+export { FindUniqueUser_organizationOrThrowArgs } from "./FindUniqueUser_organizationOrThrowArgs";
+export { GroupByUser_organizationArgs } from "./GroupByUser_organizationArgs";
+export { UpdateManyUser_organizationArgs } from "./UpdateManyUser_organizationArgs";
+export { UpdateOneUser_organizationArgs } from "./UpdateOneUser_organizationArgs";
+export { UpsertOneUser_organizationArgs } from "./UpsertOneUser_organizationArgs";

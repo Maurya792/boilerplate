@@ -1,0 +1,12 @@
+fragment User on User {
+  id
+  username
+  name
+  status
+  user_organizations {
+    ...CoreUserOrganization
+  }
+  organizations {
+    ...CoreOrganization
+  }
+}

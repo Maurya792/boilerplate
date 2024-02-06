@@ -1,0 +1,172 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
+  binaryTargets   = ["native"]
+}
+
+generator typegraphql {
+  provider            = "typegraphql-prisma"
+  output              = "./__generated__/graphql"
+  formatGeneratedCode = "prettier"
+  useSimpleInputs     = true
+  simpleResolvers     = true
+  previewFeatures     = ["views"]
+  binaryTargets       = ["native"]
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+/// @@TypeGraphQL.type(plural: "assets")
+model asset {
+  id       Int      @id @default(autoincrement()) @db.UnsignedInt
+  url      String?  @db.Text
+  date     DateTime @db.DateTime(0)
+  trace_id Int      @db.UnsignedInt
+  trace    trace    @relation(fields: [trace_id], references: [id], map: "asset_trace_id_foreign", onDelete: Cascade)
+
+  @@index([trace_id], map: "asset_trace_id_index")
+}
+
+/// @@TypeGraphQL.type(plural: "logs")
+model log {
+  id         Int      @id @default(autoincrement()) @db.UnsignedInt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  start_time DateTime @db.DateTime(0)
+  end_time   DateTime @db.DateTime(0)
+  is_active  Boolean
+  status     String   @db.VarChar(255)
+  trace_id   Int
+  trace      trace    @relation(fields: [trace_id], references: [id], map: "log_trace_id_foreign", onDelete: Cascade)
+
+  @@index([trace_id], map: "log_trace_id_index")
+}
+
+/// @@TypeGraphQL.type(plural: "parts")
+model part {
+  id             Int      @id @default(autoincrement()) @db.UnsignedInt
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  active_time    Decimal  @db.Decimal(10, 0)
+  in_active_time Decimal  @db.Decimal(10, 0)
+  trace_id       Int      @db.UnsignedInt
+  trace          trace    @relation(fields: [trace_id], references: [id], map: "part_trace_id_foreign", onDelete: Cascade)
+
+  @@index([trace_id], map: "part_trace_id_index")
+}
+
+/// @@TypeGraphQL.type(plural: "traces")
+model trace {
+  id                   Int                @id @default(autoincrement()) @db.UnsignedInt
+  created_at           DateTime           @default(now())
+  updated_at           DateTime           @updatedAt
+  active_time          Decimal            @db.Decimal(10, 0)
+  in_active_time       Decimal            @db.Decimal(10, 0)
+  all_time             Decimal            @db.Decimal(10, 0)
+  date                 DateTime           @db.DateTime(0)
+  user_id              Int
+  organization_id      Int
+  user_organization_id Int
+  images               asset[]
+  logs                 log[]
+  parts                part[]
+  user_organization    user_organization? @relation(fields: [user_organization_id, user_id, organization_id], references: [id, user_id, organization_id], onDelete: Cascade)
+
+  @@unique([user_organization_id, date])
+  @@unique([id, user_organization_id, date])
+  @@index([user_id], map: "trace_user_id_index")
+}
+
+/// @@TypeGraphQL.type(plural: "users")
+model user {
+  id                 Int                 @id @default(autoincrement()) @db.UnsignedInt
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
+  username           String              @unique(map: "user_username_unique")
+  name               String?             @db.Text
+  /// @TypeGraphQL.omit(output: true)
+  password           String              @db.Text
+  user_organizations user_organization[]
+  status             account_status      @default(initiated)
+}
+
+/// @@TypeGraphQL.type(plural: "organizations")
+model organization {
+  id                 Int                 @id @default(autoincrement()) @db.UnsignedInt
+  slug               String              @unique
+  name               String?
+  user_organizations user_organization[]
+  teams              team[]
+
+  @@unique([id, slug])
+}
+
+/// @@TypeGraphQL.type(plural: "user_organizations")
+model user_organization {
+  id                      Int                      @id @default(autoincrement())
+  role                    user_role                @default(user)
+  user                    user?                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id                 Int
+  slug                    String
+  traces                  trace[]
+  organization            organization?            @relation(fields: [organization_id, slug], references: [id, slug], onDelete: Cascade)
+  organization_id         Int
+  invitation_status       user_invitation_status?  @default(connected)
+  last_invited            DateTime?
+  user_organization_teams user_organization_team[]
+
+  @@unique([user_id, organization_id])
+  @@unique([user_id, slug])
+  @@unique([user_id, organization_id, role])
+  @@unique([id, user_id, organization_id])
+}
+
+/// @@TypeGraphQL.type(plural: "teams")
+model team {
+  id                      Int                      @id @default(autoincrement())
+  name                    String
+  organization            organization?            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization_id         Int
+  user_organization_teams user_organization_team[]
+
+  @@unique([name, organization_id])
+}
+
+/// @@TypeGraphQL.type(plural: "user_organization_teams")
+model user_organization_team {
+  id                   Int                @id @default(autoincrement())
+  team                 team?              @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  team_id              Int
+  user_organization    user_organization? @relation(fields: [user_organization_id], references: [id], onDelete: Cascade)
+  user_organization_id Int?
+  role                 team_role          @default(member)
+
+  @@unique([team_id, user_organization_id])
+  @@unique([team_id, user_organization_id, role])
+}
+
+enum team_role {
+  manager
+  member
+}
+
+enum user_role {
+  admin
+  user
+  owner
+}
+
+enum account_status {
+  active
+  initiated
+}
+
+enum user_invitation_status {
+  notConnected
+  invited
+  connected
+}

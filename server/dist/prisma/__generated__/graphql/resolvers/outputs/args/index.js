@@ -1,0 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.User_organizationCountUser_organization_teamsArgs = exports.User_organizationCountTracesArgs = exports.UserCountUser_organizationsArgs = exports.TraceCountPartsArgs = exports.TraceCountLogsArgs = exports.TraceCountImagesArgs = exports.TeamCountUser_organization_teamsArgs = exports.OrganizationCountUser_organizationsArgs = exports.OrganizationCountTeamsArgs = void 0;
+var OrganizationCountTeamsArgs_1 = require("./OrganizationCountTeamsArgs");
+Object.defineProperty(exports, "OrganizationCountTeamsArgs", { enumerable: true, get: function () { return OrganizationCountTeamsArgs_1.OrganizationCountTeamsArgs; } });
+var OrganizationCountUser_organizationsArgs_1 = require("./OrganizationCountUser_organizationsArgs");
+Object.defineProperty(exports, "OrganizationCountUser_organizationsArgs", { enumerable: true, get: function () { return OrganizationCountUser_organizationsArgs_1.OrganizationCountUser_organizationsArgs; } });
+var TeamCountUser_organization_teamsArgs_1 = require("./TeamCountUser_organization_teamsArgs");
+Object.defineProperty(exports, "TeamCountUser_organization_teamsArgs", { enumerable: true, get: function () { return TeamCountUser_organization_teamsArgs_1.TeamCountUser_organization_teamsArgs; } });
+var TraceCountImagesArgs_1 = require("./TraceCountImagesArgs");
+Object.defineProperty(exports, "TraceCountImagesArgs", { enumerable: true, get: function () { return TraceCountImagesArgs_1.TraceCountImagesArgs; } });
+var TraceCountLogsArgs_1 = require("./TraceCountLogsArgs");
+Object.defineProperty(exports, "TraceCountLogsArgs", { enumerable: true, get: function () { return TraceCountLogsArgs_1.TraceCountLogsArgs; } });
+var TraceCountPartsArgs_1 = require("./TraceCountPartsArgs");
+Object.defineProperty(exports, "TraceCountPartsArgs", { enumerable: true, get: function () { return TraceCountPartsArgs_1.TraceCountPartsArgs; } });
+var UserCountUser_organizationsArgs_1 = require("./UserCountUser_organizationsArgs");
+Object.defineProperty(exports, "UserCountUser_organizationsArgs", { enumerable: true, get: function () { return UserCountUser_organizationsArgs_1.UserCountUser_organizationsArgs; } });
+var User_organizationCountTracesArgs_1 = require("./User_organizationCountTracesArgs");
+Object.defineProperty(exports, "User_organizationCountTracesArgs", { enumerable: true, get: function () { return User_organizationCountTracesArgs_1.User_organizationCountTracesArgs; } });
+var User_organizationCountUser_organization_teamsArgs_1 = require("./User_organizationCountUser_organization_teamsArgs");
+Object.defineProperty(exports, "User_organizationCountUser_organization_teamsArgs", { enumerable: true, get: function () { return User_organizationCountUser_organization_teamsArgs_1.User_organizationCountUser_organization_teamsArgs; } });
+//# sourceMappingURL=index.js.map

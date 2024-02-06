@@ -1,0 +1,9 @@
+mutation joinOrg($data: JoinOrgInput!) {
+  joinOrg(data: $data) {
+    errors {
+      ...Error
+    }
+    isSuccess
+    isNewUser
+  }
+}
