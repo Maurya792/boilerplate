@@ -71,18 +71,6 @@ export const HomeBanner: React.FC = (props) => {
             )}
           </button>
         </div>
-
-        {/* bottom  */}
-
-        <Suspense
-          fallback={
-            <div className="text-[30px] text-center font-semibold">
-              Loading...
-            </div>
-          }
-        >
-          {user?.organizations && <Organizations data={user.organizations} />}
-        </Suspense>
       </div>
     </div>
   );
