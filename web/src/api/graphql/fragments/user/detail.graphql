@@ -3,13 +3,4 @@ fragment DetailUser on User {
   username
   name
   status
-  user_organizations {
-    ...CoreUserOrganization
-  }
-  user_organization(orgId : $orgId) {
-    ...CoreUserOrganization
-  }
-  organizations {
-    ...CoreOrganization
-  }
 }

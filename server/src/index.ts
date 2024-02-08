@@ -11,18 +11,19 @@ import { InMemoryLRUCache } from "@apollo/utils.keyvaluecache";
 
 import { AuthController } from "./controllers/auth-controller";
 import { join } from "path";
-import { authChecker } from "./graphql/auth/authChecker";
+// import { authChecker } from ".//auth/authChecker.1";
 import { resolvers } from "../prisma/__generated__/graphql";
 import { enhanceResolvers } from "./graphql/enhancers";
 import { prismaClient } from "../prisma/__generated__/client";
-import { TraceController } from "./controllers/trace-controller";
+// import { TraceController } from "./controllers/trace-controller";
 import moment from "moment-timezone";
 import { CustomUserResolver } from "./resolvers/demo";
 import { TokenService } from "./services/token-service";
-import { fieldResolvers } from "./resolvers/field-resolvers";
+// import { fieldResolvers } from "./resolvers/field-resolvers";
 import { Prisma } from "prisma/prisma-client";
 import { customResolvers } from "./resolvers";
-moment.tz.setDefault("UTC")
+import { authChecker } from "./graphql/auth/authChecker";
+moment.tz.setDefault("UTC");
 const main = async () => {
   // const orm = await MikroORM.init(mikroConfig);
   // await orm.getMigrator().up();
@@ -39,12 +40,11 @@ const main = async () => {
         "http://localhost:3001",
         "https://localhost:3010",
         "https://codage-tt-admin.netlify.app",
-        "https://codage-time-tracker.vercel.app"
+        "https://codage-time-tracker.vercel.app",
       ],
       credentials: true,
     })
   );
-
 
   const authController = new AuthController();
   /**
@@ -66,7 +66,7 @@ const main = async () => {
 
   app.post("/reset-password", authController.resetPassword);
 
-  const traceController = new TraceController();
+  // const traceController = new TraceController();
   /**
    *
    *
@@ -74,7 +74,7 @@ const main = async () => {
    *
    *
    **/
-  app.put("/", traceController.submit);
+  // app.put("/", traceController.submit);
 
   /**
    * Add custom decorators to resolvers
@@ -83,15 +83,19 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
     schema: await buildSchema({
-      resolvers: [...resolvers, ...fieldResolvers, ...customResolvers],
+      // resolvers: [...resolvers, ...fieldResolvers, ...customResolvers],
+      resolvers: [...resolvers, ...customResolvers],
       validate: false,
       authChecker,
     }),
     introspection: true,
     context: async ({ req }) => {
       const token = (req.headers.authorization || "").replace("Bearer ", "");
-      const userFromToken = await TokenService.verifyToken(token, "accessToken")
-      return { prisma: prismaClient, token, user : userFromToken };
+      const userFromToken = await TokenService.verifyToken(
+        token,
+        "accessToken"
+      );
+      return { prisma: prismaClient, token, user: userFromToken };
     },
     cache: new InMemoryLRUCache(),
     formatError: (err) => {
@@ -99,8 +103,8 @@ const main = async () => {
         err.extensions.code = "ACCESS_DENIED";
         return err;
       }
-      if(err.extensions.exception?.name === "PrismaClientKnownRequestError"){
-        err.extensions.field = err.extensions.exception?.meta?.target
+      if (err.extensions.exception?.name === "PrismaClientKnownRequestError") {
+        err.extensions.field = err.extensions.exception?.meta?.target;
       }
       // Otherwise return the original error. The error can also
       // be manipulated in other ways, as long as it's returned.

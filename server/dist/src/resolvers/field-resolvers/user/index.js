@@ -16,39 +16,6 @@ exports.ExUserResolver = void 0;
 const type_graphql_1 = require("type-graphql");
 const graphql_1 = require("../../../../prisma/__generated__/graphql");
 const prisma_client_1 = require("prisma/prisma-client");
-let ExUserResolver = class ExUserResolver {
-    async organizations(rootUser, { prisma, user }, args) {
-        return prisma.organization.findMany(Object.assign(Object.assign({}, args), { where: {
-                user_organizations: {
-                    some: {
-                        user_id: rootUser === null || rootUser === void 0 ? void 0 : rootUser.id,
-                        OR: [
-                            { role: { in: [prisma_client_1.user_role.admin, prisma_client_1.user_role.owner] } },
-                            {
-                                user_organization_teams: { some: { role: prisma_client_1.team_role.manager } },
-                            },
-                        ],
-                        organization: {
-                            user_organizations: { some: { user_id: user === null || user === void 0 ? void 0 : user.userId } },
-                        },
-                    },
-                },
-            } }));
-    }
-    async user_organization(rootUser, { prisma, user }, orgId) {
-        if (!orgId) {
-            return null;
-        }
-        return prisma.user_organization.findUnique({
-            where: {
-                user_id_organization_id: {
-                    user_id: rootUser.id,
-                    organization_id: orgId,
-                },
-            },
-        });
-    }
-};
 exports.ExUserResolver = ExUserResolver;
 __decorate([
     (0, type_graphql_1.FieldResolver)((type) => [graphql_1.Organization], { nullable: true }),

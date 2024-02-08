@@ -19,36 +19,15 @@ class AuthController {
                 const userFound = await client_1.prismaClient.user.findUnique({
                     where: {
                         username: body.username,
-                        status: client_2.account_status.active
-                    },
-                    include: {
-                        user_organizations: {
-                            distinct: ["organization_id"],
-                            select: {
-                                organization: {
-                                    select: {
-                                        id: true,
-                                        name: true,
-                                        slug: true
-                                    },
-                                },
-                            },
-                        },
+                        status: client_2.account_status.active,
                     },
                 });
                 if (userFound) {
                     const valid = await bcryptjs_1.default.compare(body.password, userFound.password);
                     if (valid) {
-                        const userOrgs = userFound === null || userFound === void 0 ? void 0 : userFound.user_organizations.reduce((acc, curr) => {
-                            var _a;
-                            return acc.find((i) => i.id === curr.organization.id)
-                                ? acc
-                                : [...acc, { id: curr.organization.id, name: (_a = curr.organization.name) !== null && _a !== void 0 ? _a : curr.organization.slug }];
-                        }, []);
                         const accessToken = token_service_1.TokenService.generateAccessToken({
                             username: userFound.username,
                             name: userFound.name,
-                            orgs: userOrgs,
                             userId: userFound.id,
                         });
                         return res.status(200).send({ accessToken });

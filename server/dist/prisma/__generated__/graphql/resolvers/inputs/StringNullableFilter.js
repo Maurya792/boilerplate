@@ -35,6 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StringNullableFilter = void 0;
 const TypeGraphQL = __importStar(require("type-graphql"));
 const NestedStringNullableFilter_1 = require("../inputs/NestedStringNullableFilter");
+const QueryMode_1 = require("../../enums/QueryMode");
 let StringNullableFilter = class StringNullableFilter {
 };
 exports.StringNullableFilter = StringNullableFilter;
@@ -98,6 +99,12 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], StringNullableFilter.prototype, "endsWith", void 0);
+__decorate([
+    TypeGraphQL.Field((_type) => QueryMode_1.QueryMode, {
+        nullable: true,
+    }),
+    __metadata("design:type", Object)
+], StringNullableFilter.prototype, "mode", void 0);
 __decorate([
     TypeGraphQL.Field((_type) => NestedStringNullableFilter_1.NestedStringNullableFilter, {
         nullable: true,

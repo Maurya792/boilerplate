@@ -12,11 +12,7 @@ const main = async (callback: () => Promise<boolean>) => {
   const orm = await MikroORM.init(mikroOrmConfig);
   const em = orm.em;
   // Fetch all traces from the database
-  const users = await em.find(
-    User,
-    {},
-    { populate: ["trace", "trace.logs", "trace.images", "trace.parts"] }
-  );
+  const users = await em.find(User, {});
   const oneWeekAgo = moment().subtract(7, "day").toDate();
   const _ = await Promise.all(
     users.map(async (user) => {

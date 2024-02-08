@@ -1,8 +1,0 @@
-mutation updateOneUser_organization_team(
-  $data: User_organization_teamUpdateInput!
-  $where: User_organization_teamWhereUniqueInput!
-) {
-  updateOneUser_organization_team(data: $data, where: $where) {
-    ...CoreUserOrganizationTeam
-  }
-}

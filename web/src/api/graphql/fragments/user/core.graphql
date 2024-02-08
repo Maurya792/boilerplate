@@ -3,10 +3,4 @@ fragment User on User {
   username
   name
   status
-  user_organizations {
-    ...CoreUserOrganization
-  }
-  organizations {
-    ...CoreOrganization
-  }
 }

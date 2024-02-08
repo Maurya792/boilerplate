@@ -168,12 +168,6 @@ let AuthResolver = class AuthResolver {
                 username: data.username,
             },
         });
-        const preJoinedOrgs = await Promise.all((data.preJoinedOrgs || [])
-            .map(async (orgId) => await prisma.organization.findUnique({
-            where: { id: orgId },
-            select: { id: true, name: true, slug: true },
-        }))
-            .filter((i) => !!i));
         if (userFound && userFound.status === prisma_client_1.account_status.active) {
             return {
                 errors: [{ field: "username", message: "User already exists." }],
@@ -185,45 +179,11 @@ let AuthResolver = class AuthResolver {
                 username: data.username,
                 password: hashedPassword,
                 name: data.name,
-                user_organizations: {
-                    createMany: {
-                        data: preJoinedOrgs.map((i) => ({
-                            organization_id: i.id,
-                            invitation_status: prisma_client_1.user_invitation_status.connected,
-                            slug: i.slug,
-                        })),
-                    },
-                },
             };
             const userUpdateRequest = {
                 username: data.username,
                 password: hashedPassword,
                 name: data.name,
-                user_organizations: userFound
-                    ? {
-                        connectOrCreate: preJoinedOrgs.map((org) => ({
-                            create: {
-                                organization_id: org.id,
-                                invitation_status: prisma_client_1.user_invitation_status.connected,
-                                slug: org.slug,
-                            },
-                            where: {
-                                user_id_organization_id: {
-                                    user_id: userFound === null || userFound === void 0 ? void 0 : userFound.id,
-                                    organization_id: org.id,
-                                },
-                            },
-                        })),
-                    }
-                    : {
-                        createMany: {
-                            data: preJoinedOrgs.map((org) => ({
-                                organization_id: org.id,
-                                invitation_status: prisma_client_1.user_invitation_status.connected,
-                                slug: org.slug,
-                            })),
-                        },
-                    },
             };
             const user = await prisma.user.upsert({
                 where: { username: data.username },
@@ -233,7 +193,6 @@ let AuthResolver = class AuthResolver {
             const verifyToken = token_service_1.TokenService.generateVerifyAccountToken({
                 userId: user.id,
                 username: user.username,
-                preJoinedOrgs,
             });
             const mailService = new mail_service_1.MailService();
             const targetUrl = new URL((_a = data.redirectUrl) !== null && _a !== void 0 ? _a : constants_1.DEFAULT_AUTH_REDIRECT_URL);
@@ -275,34 +234,8 @@ let AuthResolver = class AuthResolver {
             const tokenData = await token_service_1.TokenService.verifyToken(data.token, "verifyAccountToken");
             const userFound = await prisma.user.findUnique({
                 where: { id: Number(tokenData === null || tokenData === void 0 ? void 0 : tokenData.userId) },
-                include: {
-                    user_organizations: {
-                        distinct: ["organization_id"],
-                        select: {
-                            organization: {
-                                select: {
-                                    id: true,
-                                    name: true,
-                                    slug: true,
-                                },
-                            },
-                        },
-                    },
-                },
             });
             if (data && userFound) {
-                const userOrgs = userFound === null || userFound === void 0 ? void 0 : userFound.user_organizations.reduce((acc, curr) => {
-                    var _a, _b, _c, _d;
-                    return acc.find((i) => { var _a; return i.id === ((_a = curr.organization) === null || _a === void 0 ? void 0 : _a.id); })
-                        ? acc
-                        : [
-                            ...acc,
-                            {
-                                id: (_a = curr.organization) === null || _a === void 0 ? void 0 : _a.id,
-                                name: (_c = (_b = curr.organization) === null || _b === void 0 ? void 0 : _b.name) !== null && _c !== void 0 ? _c : (_d = curr.organization) === null || _d === void 0 ? void 0 : _d.slug,
-                            },
-                        ];
-                }, []);
                 const user = await prisma.user.update({
                     where: { id: userFound.id },
                     data: { status: prisma_client_1.account_status.active },
@@ -311,7 +244,6 @@ let AuthResolver = class AuthResolver {
                     userId: user.id,
                     username: user.username,
                     name: user.name,
-                    orgs: userOrgs,
                 });
                 return {
                     isSuccess: true,
@@ -329,40 +261,13 @@ let AuthResolver = class AuthResolver {
                 username: data.username,
                 status: prisma_client_1.account_status.active,
             },
-            include: {
-                user_organizations: {
-                    distinct: ["organization_id"],
-                    select: {
-                        organization: {
-                            select: {
-                                id: true,
-                                name: true,
-                                slug: true,
-                            },
-                        },
-                    },
-                },
-            },
         });
         if (userFound) {
             const valid = await bcryptjs_1.default.compare(data.password, userFound.password);
             if (valid) {
-                const userOrgs = userFound === null || userFound === void 0 ? void 0 : userFound.user_organizations.reduce((acc, curr) => {
-                    var _a, _b, _c, _d;
-                    return acc.find((i) => { var _a; return i.id === ((_a = curr.organization) === null || _a === void 0 ? void 0 : _a.id); })
-                        ? acc
-                        : [
-                            ...acc,
-                            {
-                                id: (_a = curr.organization) === null || _a === void 0 ? void 0 : _a.id,
-                                name: (_c = (_b = curr.organization) === null || _b === void 0 ? void 0 : _b.name) !== null && _c !== void 0 ? _c : (_d = curr.organization) === null || _d === void 0 ? void 0 : _d.slug,
-                            },
-                        ];
-                }, []);
                 const accessToken = token_service_1.TokenService.generateAccessToken({
                     username: userFound.username,
                     name: userFound.name,
-                    orgs: userOrgs,
                     userId: userFound.id,
                 });
                 return {
@@ -434,38 +339,11 @@ let AuthResolver = class AuthResolver {
                 const updatedUser = await prisma.user.update({
                     data: { password: passwordHash, status: prisma_client_1.account_status.active },
                     where: { id: userFound.id },
-                    include: {
-                        user_organizations: {
-                            distinct: ["organization_id"],
-                            select: {
-                                organization: {
-                                    select: {
-                                        id: true,
-                                        name: true,
-                                        slug: true,
-                                    },
-                                },
-                            },
-                        },
-                    },
                 });
-                const userOrgs = updatedUser === null || updatedUser === void 0 ? void 0 : updatedUser.user_organizations.reduce((acc, curr) => {
-                    var _a, _b, _c, _d;
-                    return acc.find((i) => { var _a; return i.id === ((_a = curr.organization) === null || _a === void 0 ? void 0 : _a.id); })
-                        ? acc
-                        : [
-                            ...acc,
-                            {
-                                id: (_a = curr.organization) === null || _a === void 0 ? void 0 : _a.id,
-                                name: (_c = (_b = curr.organization) === null || _b === void 0 ? void 0 : _b.name) !== null && _c !== void 0 ? _c : (_d = curr.organization) === null || _d === void 0 ? void 0 : _d.slug,
-                            },
-                        ];
-                }, []);
                 const accessToken = token_service_1.TokenService.generateAccessToken({
                     userId: userFound.id,
                     username: userFound.username,
                     name: userFound.name,
-                    orgs: userOrgs,
                 });
                 return {
                     accessToken,

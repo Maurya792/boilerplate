@@ -34,7 +34,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserCreateInput = void 0;
 const TypeGraphQL = __importStar(require("type-graphql"));
-const User_organizationCreateNestedManyWithoutUserInput_1 = require("../inputs/User_organizationCreateNestedManyWithoutUserInput");
 const account_status_1 = require("../../enums/account_status");
 let UserCreateInput = class UserCreateInput {
 };
@@ -75,12 +74,6 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], UserCreateInput.prototype, "status", void 0);
-__decorate([
-    TypeGraphQL.Field((_type) => User_organizationCreateNestedManyWithoutUserInput_1.User_organizationCreateNestedManyWithoutUserInput, {
-        nullable: true,
-    }),
-    __metadata("design:type", Object)
-], UserCreateInput.prototype, "user_organizations", void 0);
 exports.UserCreateInput = UserCreateInput = __decorate([
     TypeGraphQL.InputType("UserCreateInput", {})
 ], UserCreateInput);

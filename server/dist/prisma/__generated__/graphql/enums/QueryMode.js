@@ -23,8 +23,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.customResolvers = void 0;
-const authResolverImport = __importStar(require("./auth/resolver"));
-const authResolvers = Object.values(authResolverImport);
-exports.customResolvers = [...authResolvers];
-//# sourceMappingURL=index.js.map
+exports.QueryMode = void 0;
+const TypeGraphQL = __importStar(require("type-graphql"));
+var QueryMode;
+(function (QueryMode) {
+    QueryMode["default"] = "default";
+    QueryMode["insensitive"] = "insensitive";
+})(QueryMode || (exports.QueryMode = QueryMode = {}));
+TypeGraphQL.registerEnumType(QueryMode, {
+    name: "QueryMode",
+    description: undefined,
+});
+//# sourceMappingURL=QueryMode.js.map

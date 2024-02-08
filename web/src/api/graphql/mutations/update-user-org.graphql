@@ -1,5 +1,0 @@
-mutation updateUserOrg($data : User_organizationUpdateInput!, $where :User_organizationWhereUniqueInput!) {
-  updateOneUser_organization(data :$data where : $where){
-    ...CoreUserOrganization
-  }
-}

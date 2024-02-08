@@ -12,16 +12,10 @@ import {
 } from "type-graphql";
 import bcrypt from "bcryptjs";
 import { DEFAULT_AUTH_REDIRECT_URL } from "../../constants";
-
-import { DataMapping, TokenService } from "../../services/token-service";
+import { TokenService } from "../../services/token-service";
 import { MailService } from "../../services/mail-service";
 import { User } from "../../../prisma/__generated__/graphql";
-import {
-  Prisma,
-  account_status,
-  organization,
-  user_invitation_status,
-} from "prisma/prisma-client";
+import { Prisma, account_status } from "prisma/prisma-client";
 import { templates } from "../../templates";
 import { UsernamePassWordInput, ResponseError } from "./types";
 
@@ -135,19 +129,7 @@ export class AuthResolver {
         username: data.username,
       },
     });
-    const preJoinedOrgs = await Promise.all(
-      (data.preJoinedOrgs || [])
-        .map(
-          async (orgId) =>
-            await prisma.organization.findUnique({
-              where: { id: orgId },
-              select: { id: true, name: true, slug: true },
-            })
-        )
-        .filter((i) => !!i) as unknown as NonNullable<
-        DataMapping["verifyAccountToken"]["preJoinedOrgs"]
-      >
-    );
+
     if (userFound && userFound.status === account_status.active) {
       return {
         errors: [{ field: "username", message: "User already exists." }],
@@ -158,45 +140,11 @@ export class AuthResolver {
         username: data.username,
         password: hashedPassword,
         name: data.name,
-        user_organizations: {
-          createMany: {
-            data: preJoinedOrgs.map((i) => ({
-              organization_id: i.id,
-              invitation_status: user_invitation_status.connected,
-              slug: i.slug,
-            })),
-          },
-        },
       };
       const userUpdateRequest: Prisma.userUpsertArgs["update"] = {
         username: data.username,
         password: hashedPassword,
         name: data.name,
-        user_organizations: userFound
-          ? {
-              connectOrCreate: preJoinedOrgs.map((org) => ({
-                create: {
-                  organization_id: org.id,
-                  invitation_status: user_invitation_status.connected,
-                  slug: org.slug,
-                },
-                where: {
-                  user_id_organization_id: {
-                    user_id: userFound?.id,
-                    organization_id: org.id,
-                  },
-                },
-              })),
-            }
-          : {
-              createMany: {
-                data: preJoinedOrgs.map((org) => ({
-                  organization_id: org.id,
-                  invitation_status: user_invitation_status.connected,
-                  slug: org.slug,
-                })),
-              },
-            },
       };
       const user = await prisma.user.upsert({
         where: { username: data.username },
@@ -207,7 +155,6 @@ export class AuthResolver {
       const verifyToken = TokenService.generateVerifyAccountToken({
         userId: user.id,
         username: user.username,
-        preJoinedOrgs,
       });
       const mailService = new MailService();
       const targetUrl = new URL(data.redirectUrl ?? DEFAULT_AUTH_REDIRECT_URL);
@@ -258,34 +205,9 @@ export class AuthResolver {
       );
       const userFound = await prisma.user.findUnique({
         where: { id: Number(tokenData?.userId) },
-        include: {
-          user_organizations: {
-            distinct: ["organization_id"],
-            select: {
-              organization: {
-                select: {
-                  id: true,
-                  name: true,
-                  slug: true,
-                },
-              },
-            },
-          },
-        },
       });
 
       if (data && userFound) {
-        const userOrgs = userFound?.user_organizations.reduce((acc, curr) => {
-          return acc.find((i) => i.id === curr.organization?.id)
-            ? acc
-            : [
-                ...acc,
-                {
-                  id: curr.organization?.id!,
-                  name: curr.organization?.name ?? curr.organization?.slug!,
-                },
-              ];
-        }, [] as Pick<organization, "id" | "name">[]);
         const user = await prisma.user.update({
           where: { id: userFound.id },
           data: { status: account_status.active },
@@ -294,7 +216,6 @@ export class AuthResolver {
           userId: user.id,
           username: user.username,
           name: user.name,
-          orgs: userOrgs,
         });
         return {
           isSuccess: true,
@@ -317,39 +238,13 @@ export class AuthResolver {
         username: data.username,
         status: account_status.active,
       },
-      include: {
-        user_organizations: {
-          distinct: ["organization_id"],
-          select: {
-            organization: {
-              select: {
-                id: true,
-                name: true,
-                slug: true,
-              },
-            },
-          },
-        },
-      },
     });
     if (userFound) {
       const valid = await bcrypt.compare(data.password, userFound.password);
       if (valid) {
-        const userOrgs = userFound?.user_organizations.reduce((acc, curr) => {
-          return acc.find((i) => i.id === curr.organization?.id)
-            ? acc
-            : [
-                ...acc,
-                {
-                  id: curr.organization?.id!,
-                  name: curr.organization?.name ?? curr.organization?.slug!,
-                },
-              ];
-        }, [] as Pick<organization, "id" | "name">[]);
         const accessToken = TokenService.generateAccessToken({
           username: userFound.username,
           name: userFound.name,
-          orgs: userOrgs,
           userId: userFound.id,
         });
         return {
@@ -434,37 +329,11 @@ export class AuthResolver {
         const updatedUser = await prisma.user.update({
           data: { password: passwordHash, status: account_status.active },
           where: { id: userFound.id },
-          include: {
-            user_organizations: {
-              distinct: ["organization_id"],
-              select: {
-                organization: {
-                  select: {
-                    id: true,
-                    name: true,
-                    slug: true,
-                  },
-                },
-              },
-            },
-          },
         });
-        const userOrgs = updatedUser?.user_organizations.reduce((acc, curr) => {
-          return acc.find((i) => i.id === curr.organization?.id)
-            ? acc
-            : [
-                ...acc,
-                {
-                  id: curr.organization?.id!,
-                  name: curr.organization?.name ?? curr.organization?.slug!,
-                },
-              ];
-        }, [] as Pick<organization, "id" | "name">[]);
         const accessToken = TokenService.generateAccessToken({
           userId: userFound.id,
           username: userFound.username,
           name: userFound.name,
-          orgs: userOrgs,
         });
         return {
           accessToken,

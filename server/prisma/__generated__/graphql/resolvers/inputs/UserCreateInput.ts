@@ -2,7 +2,6 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
-import { User_organizationCreateNestedManyWithoutUserInput } from "../inputs/User_organizationCreateNestedManyWithoutUserInput";
 import { account_status } from "../../enums/account_status";
 
 @TypeGraphQL.InputType("UserCreateInput", {})
@@ -36,14 +35,4 @@ export class UserCreateInput {
     nullable: true,
   })
   status?: "active" | "initiated" | undefined;
-
-  @TypeGraphQL.Field(
-    (_type) => User_organizationCreateNestedManyWithoutUserInput,
-    {
-      nullable: true,
-    },
-  )
-  user_organizations?:
-    | User_organizationCreateNestedManyWithoutUserInput
-    | undefined;
 }

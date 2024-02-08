@@ -5,30 +5,25 @@ import {
   RESET_PASSWORD_TOKEN_SECRET,
   VERIFY_ACCOUNT_TOKEN_SECRET,
 } from "../../constants";
-import { organization, user } from "@prisma/client";
+import { user } from "@prisma/client";
 const tokenSecrets = {
   accessToken: ACCESS_TOKEN_SECRET,
   resetPasswordToken: RESET_PASSWORD_TOKEN_SECRET,
   verifyAccountToken: VERIFY_ACCOUNT_TOKEN_SECRET,
-  userOrgInvitationToken : INVITATION_TOKEN_SECRET
+  userOrgInvitationToken: INVITATION_TOKEN_SECRET,
 };
-export type AccessTokenData = Pick<user, 'name'|'username'> & {
+export type AccessTokenData = Pick<user, "name" | "username"> & {
   userId: number;
-  orgs: Pick<organization, "id" | "name">[];
 };
 
-type UserOrgInvitationTokenData = Pick<AccessTokenData, 'username' | 'userId'> & { userOrgId : number, orgName : string };
+type UserOrgInvitationTokenData = Pick<
+  AccessTokenData,
+  "username" | "userId"
+> & { userOrgId: number; orgName: string };
 export type DataMapping = {
   accessToken: AccessTokenData;
   resetPasswordToken: Pick<AccessTokenData, "username" | "userId">;
-  verifyAccountToken: Pick<AccessTokenData, 'username' | 'userId'> & {
-    preJoinedOrgs? : {
-      id: number;
-      slug: string;
-      name: string | null;
-    }[]
-  };
-  userOrgInvitationToken : UserOrgInvitationTokenData | { isNewUser:true, username : string, orgName : string, orgId : number};
+  verifyAccountToken: Pick<AccessTokenData, "username" | "userId">;
 };
 export class TokenService {
   static generateAccessToken(values: DataMapping["accessToken"]) {
@@ -41,12 +36,12 @@ export class TokenService {
     token: string,
     type: T
   ) {
-    return new Promise<(jwt.JwtPayload & DataMapping[T]) | null>((res) => {
+    return new Promise<jwt.JwtPayload | null>((res) => {
       jwt.verify(token, tokenSecrets[type], (error, data) => {
         if (error) {
           return res(null);
         }
-        return res(data as jwt.JwtPayload & DataMapping[T]);
+        return res(data as jwt.JwtPayload);
       });
     });
   }
@@ -60,11 +55,6 @@ export class TokenService {
   static generateVerifyAccountToken(values: DataMapping["verifyAccountToken"]) {
     return jwt.sign(values, tokenSecrets.verifyAccountToken, {
       expiresIn: "15m", // 15 mins
-    });
-  }
-  static generateUserOrgInvitationToken(values: DataMapping["userOrgInvitationToken"]) {
-    return jwt.sign(values, tokenSecrets.userOrgInvitationToken, {
-      expiresIn: "7d", // 15 mins
     });
   }
 }

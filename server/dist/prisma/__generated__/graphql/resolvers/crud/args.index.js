@@ -14,13 +14,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./Asset/args"), exports);
-__exportStar(require("./Log/args"), exports);
-__exportStar(require("./Organization/args"), exports);
-__exportStar(require("./Part/args"), exports);
-__exportStar(require("./Team/args"), exports);
-__exportStar(require("./Trace/args"), exports);
 __exportStar(require("./User/args"), exports);
-__exportStar(require("./User_organization/args"), exports);
-__exportStar(require("./User_organization_team/args"), exports);
 //# sourceMappingURL=args.index.js.map

@@ -39,7 +39,6 @@ const Enumaccount_statusFilter_1 = require("../inputs/Enumaccount_statusFilter")
 const StringFilter_1 = require("../inputs/StringFilter");
 const StringNullableFilter_1 = require("../inputs/StringNullableFilter");
 const UserWhereInput_1 = require("../inputs/UserWhereInput");
-const User_organizationListRelationFilter_1 = require("../inputs/User_organizationListRelationFilter");
 let UserWhereUniqueInput = class UserWhereUniqueInput {
 };
 exports.UserWhereUniqueInput = UserWhereUniqueInput;
@@ -103,12 +102,6 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], UserWhereUniqueInput.prototype, "status", void 0);
-__decorate([
-    TypeGraphQL.Field((_type) => User_organizationListRelationFilter_1.User_organizationListRelationFilter, {
-        nullable: true,
-    }),
-    __metadata("design:type", Object)
-], UserWhereUniqueInput.prototype, "user_organizations", void 0);
 exports.UserWhereUniqueInput = UserWhereUniqueInput = __decorate([
     TypeGraphQL.InputType("UserWhereUniqueInput", {})
 ], UserWhereUniqueInput);

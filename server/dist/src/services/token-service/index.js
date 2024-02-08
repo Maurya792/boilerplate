@@ -10,7 +10,7 @@ const tokenSecrets = {
     accessToken: constants_1.ACCESS_TOKEN_SECRET,
     resetPasswordToken: constants_1.RESET_PASSWORD_TOKEN_SECRET,
     verifyAccountToken: constants_1.VERIFY_ACCOUNT_TOKEN_SECRET,
-    userOrgInvitationToken: constants_1.INVITATION_TOKEN_SECRET
+    userOrgInvitationToken: constants_1.INVITATION_TOKEN_SECRET,
 };
 class TokenService {
     static generateAccessToken(values) {
@@ -36,11 +36,6 @@ class TokenService {
     static generateVerifyAccountToken(values) {
         return jsonwebtoken_1.default.sign(values, tokenSecrets.verifyAccountToken, {
             expiresIn: "15m",
-        });
-    }
-    static generateUserOrgInvitationToken(values) {
-        return jsonwebtoken_1.default.sign(values, tokenSecrets.userOrgInvitationToken, {
-            expiresIn: "7d",
         });
     }
 }

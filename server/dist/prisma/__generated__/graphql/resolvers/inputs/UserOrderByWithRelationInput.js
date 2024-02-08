@@ -35,7 +35,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserOrderByWithRelationInput = void 0;
 const TypeGraphQL = __importStar(require("type-graphql"));
 const SortOrderInput_1 = require("../inputs/SortOrderInput");
-const User_organizationOrderByRelationAggregateInput_1 = require("../inputs/User_organizationOrderByRelationAggregateInput");
 const SortOrder_1 = require("../../enums/SortOrder");
 let UserOrderByWithRelationInput = class UserOrderByWithRelationInput {
 };
@@ -82,12 +81,6 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], UserOrderByWithRelationInput.prototype, "status", void 0);
-__decorate([
-    TypeGraphQL.Field((_type) => User_organizationOrderByRelationAggregateInput_1.User_organizationOrderByRelationAggregateInput, {
-        nullable: true,
-    }),
-    __metadata("design:type", Object)
-], UserOrderByWithRelationInput.prototype, "user_organizations", void 0);
 exports.UserOrderByWithRelationInput = UserOrderByWithRelationInput = __decorate([
     TypeGraphQL.InputType("UserOrderByWithRelationInput", {})
 ], UserOrderByWithRelationInput);

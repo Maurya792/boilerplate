@@ -1,15 +1,6 @@
-import {
-  Args,
-  ArgsType,
-  AuthChecker,
-  Authorized,
-  Field,
-  createMethodDecorator,
-} from "type-graphql";
+import { AuthChecker } from "type-graphql";
 // import { User } from "../../../entities/User";
 import { MyContext } from "../../types";
-import jwt from "jsonwebtoken";
-import { team_role, user_role } from "@prisma/client";
 import { TokenService } from "../../services/token-service";
 export { Authorized as Authed } from "type-graphql";
 
@@ -19,7 +10,7 @@ export const authChecker: AuthChecker<MyContext> = async (
   roles
 ) => {
   // // console.log(token)
-  // return true;
+  return true;
   const userFromToken = await TokenService.verifyToken(
     token ?? "",
     "accessToken"
@@ -43,29 +34,4 @@ export const authChecker: AuthChecker<MyContext> = async (
     // and if no user, restrict access
     return false;
   }
-  const allowed_roles = roles
-    .map((i) => user_role[i as keyof typeof user_role])
-    .filter((i) => !!i);
-  const count = await prisma.organization.count({
-    where: {
-      user_organizations: {
-        some: {
-          user_id: user.id,
-          OR: [
-            {
-              role: { in: [user_role.owner, ...allowed_roles] },
-            },
-            {
-              user_organization_teams: {
-                some: {
-                  role: team_role.manager,
-                },
-              },
-            },
-          ],
-        },
-      },
-    },
-  });
-  return count > 0;
 };

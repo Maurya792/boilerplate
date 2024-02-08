@@ -58,9 +58,7 @@ export const HomeBanner: React.FC = (props) => {
 
         {/* middle  */}
         <div className="block sm:flex justify-between items-center pt-5 em:pt-10">
-          <h3 className="text-[18px] sm:text-[20px] md:text-[26px] xl:text-[30px] font-semibold leading-[35px]">
-            {user ? `Joined Organizations by you` : <span><Link href={routes.login({ query: { callbackUrl: routes.createOrg() } })} className="px-5 py-2 bg-[#98BBA9] text-white rounded-lg hover:shadow-xl">Login</Link> and create your first organization</span>}
-          </h3>
+
           <button className="mt-6 sm:mt-0 ml-auto mr-0 block">
             {user && (
               <Link

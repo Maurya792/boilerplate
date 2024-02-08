@@ -1,8 +1,0 @@
-fragment DetailTeam on Team {
-  id
-  name
-  organization_id
-  users {
-    ...DetailUser
-  }
-}

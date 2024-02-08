@@ -35,6 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StringFilter = void 0;
 const TypeGraphQL = __importStar(require("type-graphql"));
 const NestedStringFilter_1 = require("../inputs/NestedStringFilter");
+const QueryMode_1 = require("../../enums/QueryMode");
 let StringFilter = class StringFilter {
 };
 exports.StringFilter = StringFilter;
@@ -98,6 +99,12 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], StringFilter.prototype, "endsWith", void 0);
+__decorate([
+    TypeGraphQL.Field((_type) => QueryMode_1.QueryMode, {
+        nullable: true,
+    }),
+    __metadata("design:type", Object)
+], StringFilter.prototype, "mode", void 0);
 __decorate([
     TypeGraphQL.Field((_type) => NestedStringFilter_1.NestedStringFilter, {
         nullable: true,

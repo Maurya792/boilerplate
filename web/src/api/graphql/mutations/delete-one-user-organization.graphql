@@ -1,8 +1,0 @@
-mutation deleteOneUser_organization($data: User_organizationWhereUniqueInput!) {
-  deleteOneUser_organization(where: $data) {
-    user {
-      ...User
-    }
-    user_id
-  }
-}

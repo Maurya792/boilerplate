@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Asset = void 0;
 const core_1 = require("@mikro-orm/core");
@@ -34,7 +35,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(() => Trace_1.Trace),
     (0, core_1.ManyToOne)(() => Trace_1.Trace),
-    __metadata("design:type", Trace_1.Trace)
+    __metadata("design:type", typeof (_a = typeof Trace_1.Trace !== "undefined" && Trace_1.Trace) === "function" ? _a : Object)
 ], Asset.prototype, "trace", void 0);
 exports.Asset = Asset = __decorate([
     (0, type_graphql_1.ObjectType)(),

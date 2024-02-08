@@ -2,9 +2,7 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../scalars";
-import { User_organization } from "../models/User_organization";
 import { account_status } from "../enums/account_status";
-import { UserCount } from "../resolvers/outputs/UserCount";
 
 @TypeGraphQL.ObjectType("User", {
   simpleResolvers: true,
@@ -37,15 +35,8 @@ export class User {
 
   password?: string;
 
-  user_organizations?: User_organization[];
-
   @TypeGraphQL.Field((_type) => account_status, {
     nullable: false,
   })
   status!: "active" | "initiated";
-
-  @TypeGraphQL.Field((_type) => UserCount, {
-    nullable: true,
-  })
-  _count?: UserCount | null;
 }

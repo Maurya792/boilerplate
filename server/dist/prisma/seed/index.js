@@ -16,7 +16,7 @@ const main = async (callback) => {
     }
     const orm = await core_1.MikroORM.init(mikro_orm_config_1.default);
     const em = orm.em;
-    const users = await em.find(User_1.User, {}, { populate: ["trace", "trace.logs", "trace.images", "trace.parts"] });
+    const users = await em.find(User_1.User, {});
     const oneWeekAgo = (0, moment_timezone_1.default)().subtract(7, "day").toDate();
     const _ = await Promise.all(users.map(async (user) => {
         console.log(`[Info] : Started migration for user ${user.name} (${user.username} , ${user.id})`);

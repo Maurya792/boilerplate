@@ -8,9 +8,7 @@ export const DecimalJSScalar = new GraphQLScalarType({
   serialize: (value: unknown) => {
     if (!Prisma.Decimal.isDecimal(value)) {
       throw new Error(
-        `[DecimalError] Invalid argument: ${Object.prototype.toString.call(
-          value,
-        )}. Expected Prisma.Decimal.`,
+        `[DecimalError] Invalid argument: ${Object.prototype.toString.call(value)}. Expected Prisma.Decimal.`,
       );
     }
     return (value as Prisma.Decimal).toString();

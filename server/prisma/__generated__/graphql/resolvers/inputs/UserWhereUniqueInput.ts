@@ -7,7 +7,6 @@ import { Enumaccount_statusFilter } from "../inputs/Enumaccount_statusFilter";
 import { StringFilter } from "../inputs/StringFilter";
 import { StringNullableFilter } from "../inputs/StringNullableFilter";
 import { UserWhereInput } from "../inputs/UserWhereInput";
-import { User_organizationListRelationFilter } from "../inputs/User_organizationListRelationFilter";
 
 @TypeGraphQL.InputType("UserWhereUniqueInput", {})
 export class UserWhereUniqueInput {
@@ -60,9 +59,4 @@ export class UserWhereUniqueInput {
     nullable: true,
   })
   status?: Enumaccount_statusFilter | undefined;
-
-  @TypeGraphQL.Field((_type) => User_organizationListRelationFilter, {
-    nullable: true,
-  })
-  user_organizations?: User_organizationListRelationFilter | undefined;
 }

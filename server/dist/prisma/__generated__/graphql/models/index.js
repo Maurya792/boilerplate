@@ -1,22 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User_organization_team = exports.User_organization = exports.User = exports.Trace = exports.Team = exports.Part = exports.Organization = exports.Log = exports.Asset = void 0;
-var Asset_1 = require("./Asset");
-Object.defineProperty(exports, "Asset", { enumerable: true, get: function () { return Asset_1.Asset; } });
-var Log_1 = require("./Log");
-Object.defineProperty(exports, "Log", { enumerable: true, get: function () { return Log_1.Log; } });
-var Organization_1 = require("./Organization");
-Object.defineProperty(exports, "Organization", { enumerable: true, get: function () { return Organization_1.Organization; } });
-var Part_1 = require("./Part");
-Object.defineProperty(exports, "Part", { enumerable: true, get: function () { return Part_1.Part; } });
-var Team_1 = require("./Team");
-Object.defineProperty(exports, "Team", { enumerable: true, get: function () { return Team_1.Team; } });
-var Trace_1 = require("./Trace");
-Object.defineProperty(exports, "Trace", { enumerable: true, get: function () { return Trace_1.Trace; } });
+exports.User = void 0;
 var User_1 = require("./User");
 Object.defineProperty(exports, "User", { enumerable: true, get: function () { return User_1.User; } });
-var User_organization_1 = require("./User_organization");
-Object.defineProperty(exports, "User_organization", { enumerable: true, get: function () { return User_organization_1.User_organization; } });
-var User_organization_team_1 = require("./User_organization_team");
-Object.defineProperty(exports, "User_organization_team", { enumerable: true, get: function () { return User_organization_team_1.User_organization_team; } });
 //# sourceMappingURL=index.js.map

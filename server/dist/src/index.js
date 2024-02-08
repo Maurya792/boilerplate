@@ -15,15 +15,13 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const utils_keyvaluecache_1 = require("@apollo/utils.keyvaluecache");
 const auth_controller_1 = require("./controllers/auth-controller");
 const path_1 = require("path");
-const authChecker_1 = require("./graphql/auth/authChecker");
 const graphql_1 = require("../prisma/__generated__/graphql");
 const enhancers_1 = require("./graphql/enhancers");
 const client_1 = require("../prisma/__generated__/client");
-const trace_controller_1 = require("./controllers/trace-controller");
 const moment_timezone_1 = __importDefault(require("moment-timezone"));
 const token_service_1 = require("./services/token-service");
-const field_resolvers_1 = require("./resolvers/field-resolvers");
 const resolvers_1 = require("./resolvers");
+const authChecker_1 = require("./graphql/auth/authChecker");
 moment_timezone_1.default.tz.setDefault("UTC");
 const main = async () => {
     const app = (0, express_1.default)();
@@ -36,7 +34,7 @@ const main = async () => {
             "http://localhost:3001",
             "https://localhost:3010",
             "https://codage-tt-admin.netlify.app",
-            "https://codage-time-tracker.vercel.app"
+            "https://codage-time-tracker.vercel.app",
         ],
         credentials: true,
     }));
@@ -47,13 +45,11 @@ const main = async () => {
     app.post("/register", authController.register);
     app.post("/forgot-password", authController.forgotPassword);
     app.post("/reset-password", authController.resetPassword);
-    const traceController = new trace_controller_1.TraceController();
-    app.put("/", traceController.submit);
     (0, enhancers_1.enhanceResolvers)();
     const apolloServer = new apollo_server_express_1.ApolloServer({
         plugins: [(0, apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground)()],
         schema: await (0, type_graphql_1.buildSchema)({
-            resolvers: [...graphql_1.resolvers, ...field_resolvers_1.fieldResolvers, ...resolvers_1.customResolvers],
+            resolvers: [...graphql_1.resolvers, ...resolvers_1.customResolvers],
             validate: false,
             authChecker: authChecker_1.authChecker,
         }),

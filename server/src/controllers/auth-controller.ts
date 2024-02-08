@@ -1,17 +1,10 @@
 import { RequestHandler } from "express";
 import bcrypt from "bcryptjs";
-import {
-  Connection,
-  IDatabaseDriver,
-  EntityManager,
-  RequiredEntityData,
-} from "@mikro-orm/core";
-import { ACCESS_TOKEN_SECRET } from "../constants";
 import jwt from "jsonwebtoken";
 import { MailService } from "../services/mail-service";
 import { prismaClient } from "../../prisma/__generated__/client";
 import { TokenService } from "../services/token-service";
-import { Prisma, account_status, organization, user } from "@prisma/client";
+import { Prisma, account_status, user } from "@prisma/client";
 export class AuthController {
   // private em: EntityManager<IDatabaseDriver<Connection>>;
   constructor() {}
@@ -26,35 +19,15 @@ export class AuthController {
       const userFound = await prismaClient.user.findUnique({
         where: {
           username: body.username,
-          status : account_status.active
-        },
-        include: {
-          user_organizations: {
-            distinct: ["organization_id"],
-            select: {
-              organization: {
-                select: {
-                  id: true,
-                  name: true,
-                  slug : true
-                },
-              },
-            },
-          },
+          status: account_status.active,
         },
       });
       if (userFound) {
         const valid = await bcrypt.compare(body.password, userFound.password);
         if (valid) {
-          const userOrgs = userFound?.user_organizations.reduce((acc, curr) => {
-            return acc.find((i) => i.id === curr.organization!.id)
-              ? acc
-              : [...acc, { id : curr.organization!.id, name : curr.organization!.name ?? curr.organization!.slug }];
-          }, [] as Pick<organization, "id" | "name">[])
           const accessToken = TokenService.generateAccessToken({
             username: userFound.username,
             name: userFound.name,
-            orgs: userOrgs,
             userId: userFound.id,
           });
           return res.status(200).send({ accessToken });

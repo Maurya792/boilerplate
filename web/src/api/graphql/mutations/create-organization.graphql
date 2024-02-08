@@ -1,8 +1,0 @@
-mutation CreateOrg($data: OrganizationCreateInput!) {
-  createOneOrganization(data: $data) {
-    ...CoreOrganization
-    user_organizations {
-      ...CoreUserOrganization
-    }
-  }
-}

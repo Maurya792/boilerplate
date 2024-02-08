@@ -1,7 +1,0 @@
-mutation joinTeam(
-  $data: User_organization_teamCreateInput!
-) {
-  createOneUser_organization_team(data: $data) {
-    id
-  }
-}

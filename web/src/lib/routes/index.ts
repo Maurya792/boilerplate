@@ -36,13 +36,6 @@ const routes = {
       args?.query,
       searchParams
     ),
-  org: (
-    args?: RouteArgs<{ org: number }>,
-    searchParams?: ReadonlyURLSearchParams | null
-  ) => getAugmentedLink(`/org/${args?.data?.org}`, args?.query, searchParams),
-  createOrg: (
-    args?: RouteArgs,
-    searchParams?: ReadonlyURLSearchParams | null
-  ) => getAugmentedLink(`/orgs/create`, args?.query, searchParams),
+ 
 };
 export default routes;
